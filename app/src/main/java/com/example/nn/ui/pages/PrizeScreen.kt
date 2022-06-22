@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -87,8 +88,8 @@ fun PrizeScreen(elementState: PrizeScreenElementState) {
             if (tasks.isNotEmpty()) {
                 LazyColumn(
                     modifier = Modifier
-                        .shadow(shape = RoundedCornerShape(size = 16.dp), elevation = 0.dp)
-                        .padding(16.dp)
+                        .padding(start = 16.dp, top = 16.dp, end = 16.dp)
+                        .clip(shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                 ) {
                     items(tasks.size) {
                         ItemTask()
@@ -213,7 +214,6 @@ private fun ListTitle(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
 @Composable
 private fun ItemTask(modifier: Modifier = Modifier) {
     Row(

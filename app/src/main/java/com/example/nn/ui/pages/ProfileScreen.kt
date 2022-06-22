@@ -9,10 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun ProfileScreen(innerPadding: PaddingValues) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(innerPadding)) {
+fun ProfileScreen(innerPadding: PaddingValues = PaddingValues()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
+    ) {
         Text(text = "Profile Screen")
     }
 }
