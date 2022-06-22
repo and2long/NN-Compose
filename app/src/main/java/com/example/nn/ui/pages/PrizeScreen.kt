@@ -31,15 +31,23 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.nn.R
+import com.example.nn.bean.TaskBean
 import com.example.nn.ui.theme.PrimaryColor
 
 @Composable
 fun PrizeScreen(elementState: PrizeScreenElementState) {
     val userPointState by elementState.userPointState.observeAsState()
+    val allTasksState by elementState.allTasksState.observeAsState()
+    // 用户积分
     val point = if (userPointState is PrizeScreenUserPointState.Loaded) {
         (userPointState as PrizeScreenUserPointState.Loaded).userPoint.point
     } else {
         0
+    }
+    // 所有任务
+    val tasks = mutableListOf<TaskBean>()
+    if (allTasksState is PrizeScreenAllTasksState.Loaded) {
+        tasks.addAll((allTasksState as PrizeScreenAllTasksState.Loaded).allTasks)
     }
     Surface(
         modifier = Modifier
@@ -49,9 +57,12 @@ fun PrizeScreen(elementState: PrizeScreenElementState) {
         Box {
             ConstraintLayout {
                 val (header, spacer, floatingPanel, listTitle) = createRefs()
-                Header(modifier = Modifier.constrainAs(header) {
-                    top.linkTo(parent.top)
-                })
+                Header(
+                    modifier = Modifier.constrainAs(header) {
+                        top.linkTo(parent.top)
+                    },
+                    taskCount = tasks.size,
+                )
                 Spacer(modifier = Modifier
                     .height(60.dp)
                     .constrainAs(spacer) {
@@ -76,7 +87,7 @@ fun PrizeScreen(elementState: PrizeScreenElementState) {
 
 
 @Composable
-private fun Header(modifier: Modifier = Modifier) {
+private fun Header(modifier: Modifier = Modifier, taskCount: Int = 0) {
     ConstraintLayout(modifier = modifier) {
         val (bg, title, subTitle) = createRefs()
         Image(
@@ -109,7 +120,7 @@ private fun Header(modifier: Modifier = Modifier) {
                 )
         ) {
             Text(
-                text = "今日还可完成8个任务",
+                text = "今日还可完成${taskCount}个任务",
                 style = TextStyle(fontSize = 14.sp, color = Color.White),
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
             )
