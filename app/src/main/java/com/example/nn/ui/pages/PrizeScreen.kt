@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -19,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -26,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ChainStyle
@@ -50,11 +54,10 @@ fun PrizeScreen(elementState: PrizeScreenElementState) {
         tasks.addAll((allTasksState as PrizeScreenAllTasksState.Loaded).allTasks)
     }
     Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xffeeeeee))
+        modifier = Modifier.fillMaxSize(),
+        color = Color(0xffefefef)
     ) {
-        Box {
+        Column {
             ConstraintLayout {
                 val (header, spacer, floatingPanel, listTitle) = createRefs()
                 Header(
@@ -80,6 +83,17 @@ fun PrizeScreen(elementState: PrizeScreenElementState) {
                         .padding(bottom = 20.dp),
                     p = point
                 )
+            }
+            if (tasks.isNotEmpty()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .shadow(shape = RoundedCornerShape(size = 16.dp), elevation = 0.dp)
+                        .padding(16.dp)
+                ) {
+                    items(tasks.size) {
+                        ItemTask()
+                    }
+                }
             }
         }
     }
@@ -196,5 +210,48 @@ private fun ListTitle(modifier: Modifier = Modifier) {
             text = "任务于每日 00:00 更新",
             style = TextStyle(fontSize = 14.sp, color = Color(0xffb2b2b2))
         )
+    }
+}
+
+@Preview
+@Composable
+private fun ItemTask(modifier: Modifier = Modifier) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(70.dp)
+            .background(Color.White),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = R.mipmap.ic_interactive),
+            contentDescription = null,
+            modifier = Modifier.padding(start = 16.dp)
+        )
+        Column(
+            modifier = Modifier
+                .weight(weight = 1F)
+                .padding(horizontal = 10.dp)
+        ) {
+            Text(
+                text = "观看互动视频",
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            )
+            Row {
+                Text(
+                    text = "可看10次，观看1次积分",
+                    style = TextStyle(fontSize = 14.sp, color = Color(0xff808080))
+                )
+                Text(text = "+10", style = TextStyle(fontSize = 14.sp, color = PrimaryColor))
+            }
+        }
+        Box(contentAlignment = Alignment.Center, modifier = modifier.padding(end = 16.dp)) {
+            Image(painter = painterResource(id = R.mipmap.ic_done_on), contentDescription = null)
+            Text(text = "去完成", style = TextStyle(fontSize = 12.sp, color = Color.White))
+        }
     }
 }
