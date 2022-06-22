@@ -17,8 +17,11 @@ import com.example.nn.ui.pages.MainScreen
 import com.example.nn.ui.theme.NNTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         setContent {
             NNTheme {
                 // A surface container using the 'background' color from the theme

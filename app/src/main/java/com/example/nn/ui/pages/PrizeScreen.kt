@@ -15,6 +15,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -24,7 +26,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ChainStyle
@@ -32,9 +33,14 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.nn.R
 import com.example.nn.ui.theme.PrimaryColor
 
-@Preview
 @Composable
-fun PrizeScreen() {
+fun PrizeScreen(elementState: PrizeScreenElementState) {
+    val userPointState by elementState.userPointState.observeAsState()
+    val point = if (userPointState is PrizeScreenUserPointState.Loaded) {
+        (userPointState as PrizeScreenUserPointState.Loaded).userPoint.point
+    } else {
+        0
+    }
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -60,7 +66,8 @@ fun PrizeScreen() {
                             top.linkTo(header.bottom)
                             bottom.linkTo(header.bottom)
                         }
-                        .padding(bottom = 20.dp)
+                        .padding(bottom = 20.dp),
+                    p = point
                 )
             }
         }
@@ -111,7 +118,7 @@ private fun Header(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun FloatingPanel(modifier: Modifier = Modifier) {
+private fun FloatingPanel(modifier: Modifier = Modifier, p: Int = 0) {
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
@@ -124,7 +131,7 @@ private fun FloatingPanel(modifier: Modifier = Modifier) {
     ) {
         val (point, subTitle, icon) = createRefs()
         Text(
-            text = "0",
+            text = "$p",
             style = TextStyle(
                 fontSize = 32.sp,
                 color = PrimaryColor,

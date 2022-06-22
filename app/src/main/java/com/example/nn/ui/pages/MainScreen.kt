@@ -1,6 +1,5 @@
 package com.example.nn.ui.pages
 
-import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
@@ -15,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 private const val TAG = "MainScreen"
 
@@ -26,7 +26,7 @@ fun MainScreen() {
     Scaffold(
         content = { innerPadding ->
             when (selectedItem) {
-                0 -> PrizeScreen()
+                0 -> PrizeScreen(PrizeScreenElementState(viewModel()))
                 1 -> ProfileScreen(innerPadding)
             }
         },
@@ -45,7 +45,6 @@ fun MainScreen() {
                         selected = selectedItem == index,
                         onClick = {
                             selectedItem = index
-                            Log.d(TAG, "MainScreen: $selectedItem")
                         }
                     )
                 }
