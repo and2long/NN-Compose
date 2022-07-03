@@ -1,52 +1,45 @@
 package com.example.nn.view_models
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.nn.api.Api
 import com.example.nn.ui.pages.PrizeScreenAllTasksState
 import com.example.nn.ui.pages.PrizeScreenUserPointState
+import com.example.nn.use_cases.PrizeUseCase
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
+class PrizeViewModel : ViewModel(), KoinComponent {
 
-class PrizeViewModel : ViewModel() {
+    private val useCase: PrizeUseCase by inject()
 
-    private val _userPointState: MutableLiveData<PrizeScreenUserPointState> by lazy {
-        MutableLiveData<PrizeScreenUserPointState>().also {
-            findUserPoint()
-        }
+    private val _userPointState: MutableStateFlow<PrizeScreenUserPointState> =
+        MutableStateFlow(PrizeScreenUserPointState.Loading)
+    val userPointState: Flow<PrizeScreenUserPointState> = _userPointState
+
+    private val _allTasksState: MutableStateFlow<PrizeScreenAllTasksState> =
+        MutableStateFlow(PrizeScreenAllTasksState.Loading)
+    val allTasksState: Flow<PrizeScreenAllTasksState> = _allTasksState
+
+    init {
+        loadUserPoint()
     }
-    val userPointState: LiveData<PrizeScreenUserPointState> = _userPointState
 
-    private val _allTasksState: MutableLiveData<PrizeScreenAllTasksState> by lazy {
-        MutableLiveData<PrizeScreenAllTasksState>().also {
-            findAllTask()
-        }
-    }
-    val allTasksState: LiveData<PrizeScreenAllTasksState> = _allTasksState
-
-
-    private fun findUserPoint() {
+    fun loadUserPoint() {
         viewModelScope.launch {
-            _userPointState.postValue(PrizeScreenUserPointState.Loading)
-            val data = Api.getInstance().findUserPoint(userId = 34758)
-            if (data.success) {
-                _userPointState.postValue(PrizeScreenUserPointState.Loaded(data.retData!!))
-            } else {
-                _userPointState.postValue(PrizeScreenUserPointState.Error)
-            }
-        }
-    }
-
-    private fun findAllTask() {
-        viewModelScope.launch {
-            _allTasksState.postValue(PrizeScreenAllTasksState.Loading)
-            val data = Api.getInstance().findAllTask()
-            if (data.success) {
-                _allTasksState.postValue(PrizeScreenAllTasksState.Loaded(data.retData!!))
-            } else {
-                _allTasksState.postValue(PrizeScreenAllTasksState.Error)
+            // TODO: 2022/7/3 and2long 更换真实用户id
+            try {
+                val result = useCase.findUserPoint(userId = 34758)
+                if (result.success) {
+                    _userPointState.emit(PrizeScreenUserPointState.Loaded(result.retData!!))
+                } else {
+                    _userPointState.emit(PrizeScreenUserPointState.Error)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _userPointState.emit(PrizeScreenUserPointState.Error)
             }
         }
     }

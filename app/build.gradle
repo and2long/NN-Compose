@@ -62,7 +62,7 @@ dependencies {
     implementation "androidx.compose.foundation:foundation:$compose_version"
     implementation "androidx.compose.foundation:foundation-layout:$compose_version"
     implementation "androidx.compose.animation:animation:$compose_version"
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha02"
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha03"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
     implementation 'androidx.core:core-ktx:1.8.0'
@@ -79,10 +79,18 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
+    implementation "io.insert-koin:koin-android:$koin_version"
+
+    // Koin Test
+    testImplementation "io.insert-koin:koin-test:$koin_version"
+    testImplementation "io.insert-koin:koin-test-junit4:$koin_version"
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation "org.robolectric:robolectric:4.8.1"
     testImplementation "androidx.test.espresso:espresso-core:3.5.0-alpha07"
     testImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+    testImplementation "io.mockk:mockk:1.12.4"
+    testImplementation "io.mockk:mockk-agent-jvm:1.12.4"
+    testImplementation 'app.cash.turbine:turbine:0.8.0'
 }

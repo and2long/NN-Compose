@@ -1,13 +1,13 @@
 package com.example.nn.ui.pages
 
-import androidx.lifecycle.LiveData
 import com.example.nn.bean.TaskBean
 import com.example.nn.bean.UserPoint
 import com.example.nn.view_models.PrizeViewModel
+import kotlinx.coroutines.flow.Flow
 
 class PrizeScreenElementState(vm: PrizeViewModel) {
-    val userPointState: LiveData<PrizeScreenUserPointState> = vm.userPointState
-    val allTasksState: LiveData<PrizeScreenAllTasksState> = vm.allTasksState
+    val userPointState: Flow<PrizeScreenUserPointState> = vm.userPointState
+    val allTasksState: Flow<PrizeScreenAllTasksState> = vm.allTasksState
 }
 
 sealed class PrizeScreenUserPointState {
